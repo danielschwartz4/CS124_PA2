@@ -2,6 +2,21 @@
 #include <vector>
 #include "matrix_mul.hh"
 
+// struct matrix
+// {
+//   int ** mat;
+//   int rows; // number of rows
+//   int cols; // number of columns
+//   ~matrix();
+// };
+
+// matrix::~matrix(){
+//   for (int i=0; i<this->rows; i++){
+//     free (this->mat[i]);
+//   }
+//   free (this->mat);
+// }
+
 
 // I just initiated array size to a random number like 100 I need to figure out how to use pointers.
 void conventional(matrix* a,
