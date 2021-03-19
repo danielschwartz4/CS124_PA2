@@ -1,5 +1,5 @@
 #include <iostream>
-#include <matrix_mul.h>
+#include <matrix_mul.hh>
 
 int main(int argc, char const *argv[])
 {  
