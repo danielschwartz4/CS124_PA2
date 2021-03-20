@@ -2,21 +2,31 @@
 #include <vector>
 #include "matrix_mul.hh"
 
+
 // struct matrix
 // {
 //   int ** mat;
 //   int rows; // number of rows
 //   int cols; // number of columns
-//   ~matrix();
 // };
 
-// matrix::~matrix(){
-//   for (int i=0; i<this->rows; i++){
-//     free (this->mat[i]);
-//   }
-//   free (this->mat);
-// }
+void free_matrix(matrix* m);
 
+
+void conventional(matrix* a,
+                  matrix* b,
+                  matrix* output);
+
+
+void free_matrix(matrix* m){
+  printf("test ");
+  for (int i=0; i<m->rows; i++){
+    printf("free %d %p\n", i, m->mat[i]);
+    free (m->mat[i]);
+  }
+  printf("free mat %p\n", m->mat);
+  free (m->mat);
+}
 
 // I just initiated array size to a random number like 100 I need to figure out how to use pointers.
 void conventional(matrix* a,
@@ -50,8 +60,3 @@ void conventional(matrix* a,
     }
 }
 
-int main(int argc, char const *argv[])
-{
-  /* code */
-  return 0;
-}
