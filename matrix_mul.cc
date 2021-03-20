@@ -3,13 +3,6 @@
 #include "matrix_mul.hh"
 
 
-// struct matrix
-// {
-//   int ** mat;
-//   int rows; // number of rows
-//   int cols; // number of columns
-// };
-
 matrix* malloc_matrix(int rows, int cols);
 
 void free_matrix(matrix* m);
@@ -18,7 +11,6 @@ void free_matrix(matrix* m);
 void conventional(matrix* a,
                   matrix* b,
                   matrix* output);
-
 
 
 matrix* malloc_matrix(int num_rows, int num_cols){
@@ -45,6 +37,8 @@ void free_matrix(matrix* m){
   free (m->mat);
   delete m;
 }
+
+
 
 void conventional(matrix* a,
                   matrix* b,
