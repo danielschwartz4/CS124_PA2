@@ -120,6 +120,12 @@ matrix* strassen(matrix* a,
     matrix* a21 = split(a, a_rows/2, 0, a_rows, a_cols/2);
     matrix* a22 = split(a, a_rows/2, a_cols/2, a_rows, a_cols);
 
+    matrix* b11 = split(b, 0, 0, b_rows/2, b_cols/2);
+    matrix* b12 = split(b, 0, b_cols/2/2, b_rows/2, b_cols);
+    matrix* b21 = split(b, b_rows/2, 0, b_rows, b_cols/2);
+    matrix* b22 = split(b, b_rows/2, b_cols/2, b_rows, b_cols);
+
+    // Make subtraction and and addition function
     matrix* p1 = strassen(a11, b12 - b22);  //where did you define b12 and b22?
     matrix* p2 = strassen(a11 + a12, b22);         
     matrix* p3 = strassen(a21 + a22, b11);         
@@ -128,10 +134,10 @@ matrix* strassen(matrix* a,
     matrix* p6 = strassen(a12 - a22, b21 + b22);   
     matrix* p7 = strassen(a11 - b21, b11 + b12);   
 
-    c11 = p5 + p4 - p2 + p6   
-    c12 = p1 + p2            
-    c21 = p3 + p4             
-    c22 = p1 + p5 - p3 - p7
+    matrix c11 = p5 + p4 - p2 + p6;
+    matrix c12 = p1 + p2;
+    matrix c21 = p3 + p4;             
+    matrix c22 = p1 + p5 - p3 - p7;
 
     // Combine 4 quadrants
 
