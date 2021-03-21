@@ -5,12 +5,15 @@
 
 matrix* malloc_matrix(int num_rows, int num_cols, int pad){
   matrix* m = new matrix;
+  // printf("malloc m: %p\n", m);
   m->rows = num_rows;
   m->cols = num_cols;
   m->pad = pad;
   m->mat = (int**) malloc(pad * sizeof(uintptr_t));
+  // printf("malloc mat: %p\n", m->mat);
   for (int i =0; i<pad; i++){
     m->mat[i] = (int*) malloc(pad*sizeof(int));
+    // printf("malloc i: %d %p\n", i, m->mat[i]);
     for(int j=0; j<pad; j++){
       m->mat[i][j] = 0;
     }
@@ -20,14 +23,14 @@ matrix* malloc_matrix(int num_rows, int num_cols, int pad){
 
 
 void free_matrix(matrix* m){
-  printf("test ");
+  // printf("test ");
   for (int i=0; i<m->pad; i++){
-    printf("free i: %d %p\n", i, m->mat[i]);
+    // printf("free i: %d %p\n", i, m->mat[i]);
     free (m->mat[i]);
   }
-  printf("free m->mat %p\n", m->mat);
+  // printf("free m->mat %p\n", m->mat);
   free (m->mat);
-  printf("free m: %p\n", m);
+  // printf("free m: %p\n", m);
   delete m;
 }
 
@@ -57,7 +60,7 @@ void addition_assert(matrix* a, matrix* b, matrix* s){
 
 //when ops is -1, it's matrix substraction. when opts is 1, it's matrix addition
 void matrix_add(matrix* a, matrix* b, matrix* s, int ops){
-  // addition_assert(matrix* a, matrix* b, matrix* s);
+  addition_assert(a, b, s);
   for (int i=0; i<a->rows; i++){
     for (int j=0; j<a->cols; j++){
       s->mat[i][j] = a->mat[i][j] + ops*b->mat[i][j];
