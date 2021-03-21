@@ -42,12 +42,19 @@ void test_sub(matrix* a, matrix*b){
 void test_copy_matrix(matrix* a, matrix expect){
 	return;
 }
-void test_conventional(matrix* m, matrix* expect){
-	return;
+void test_conventional(matrix* a, matrix* b, matrix* expect){
+	matrix* tmp1 = malloc_matrix(a->rows, b->cols, a->pad);
+	conventional(a, b, tmp1);
+	compare_matrix(tmp1, expect);
+	free_matrix(tmp1);
 }
 
-void test_strassen(matrix* m, matrix* expect){
-	return;
+void test_strassen(matrix* a, matrix* b, matrix* expect){
+	matrix* tmp1 = malloc_matrix(a->rows, b->cols, a->pad);
+	strassen(tmp1, a, b,1);
+	printf("here\n");
+	compare_matrix(tmp1, expect);
+	free_matrix(tmp1);
 }
 
 void test_strassen_pad(matrix* m, matrix* expect){
@@ -69,7 +76,19 @@ int main(int argc, char const *argv[]){
 	}
 
 	compare_matrix(a, b);
+	printf("pass compare_matrix\n");
 	test_add(a, b, c);
+	printf("pass test_add\n");
+
+	c->mat[0][0] = 10;
+	c->mat[0][1] = 13;
+	c->mat[1][0] = 22;
+	c->mat[1][1] = 29;
+	create_matrix(b,2);
+	test_conventional(a, b, c);
+	printf("pass conventional\n");
+
+	test_strassen(a,b,c);
 
 
 	free_matrix(a);

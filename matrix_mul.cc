@@ -148,14 +148,14 @@ void strassen(matrix* output,matrix* a,
     free_matrix(a12);
     free_matrix(a21);
     free_matrix(a22);
-
+    
     free_matrix(b11);
     free_matrix(b12);
     free_matrix(b21);
     free_matrix(b22);
 
     for (int i=1; i<8; i++){
-      free_matrix(p[1]);
+      free_matrix(p[i]);
     }
 
     free_matrix(tmp1);
