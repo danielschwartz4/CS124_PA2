@@ -1,28 +1,58 @@
-#include "matrix_mul.hh"
 #include <cstdint>
 #include <stdlib.h> 
 #include <stdio.h>
+#include "matrix.hh"
+#include "matrix_mul.hh"
 
-
-matrix* create_matrix(int num_rows, int num_cols, int start=1){
+void create_matrix(matrix* m, int start=1){
 	int x = start;
-	matrix* m = new matrix;
-	m->rows = num_rows;
-	m->cols = num_cols;
-	m->mat = (int**) malloc(num_rows*sizeof(uintptr_t));
-	for (int i =0; i<num_rows; i++){
-		m->mat[i] = (int*) malloc(num_cols*sizeof(int));
-		for(int j=0; j<num_cols; j++){
+	printf("m: %p\n", m);
+	printf("m->mat: %p\n", m->mat);
+
+	for (int i =0; i<m->pad; i++){
+		printf("i: %p\n", m->mat[i]);
+		for(int j=0; j<m->pad; j++){
 			m->mat[i][j] = x;
 			x++;
 		}
 	}
-	return m;
+
 }
-int main(int argc, char const *argv[])
-{
-	matrix *a = create_matrix(2,2,1);
-	matrix *b = create_matrix(2,2,2);
+
+// test matrix addition
+void test_add(matrix* a, matrix* b){
+	return;
+}
+
+// test matrix substraction
+void test_sub(matrix* a, matrix*b){
+	return;
+}
+
+//test copy_matrix
+void test_copy_matrix(matrix* a, matrix expect){
+	return;
+}
+void test_conventional(matrix* m, matrix* expect){
+	return;
+}
+
+void test_strassen(matrix* m, matrix* expect){
+	return;
+}
+
+void test_strassen_pad(matrix* m, matrix* expect){
+	return;
+};
+
+int main(int argc, char const *argv[]){
+	matrix* a = malloc_matrix(2,2,1);
+	create_matrix(a,1);
+
+	matrix* b = malloc_matrix(2,2,2);
+	create_matrix(b,2);
+
+
 	free_matrix(a);
 	free_matrix(b);
 	return 0;

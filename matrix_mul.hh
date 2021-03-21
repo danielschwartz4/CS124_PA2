@@ -1,30 +1,19 @@
-#ifndef MATRIX_HH
-#define MATRIX_HH
+#ifndef MATRIX_MUL_HH
+#define MATRIX_MUL_HH
 
 #include <stdlib.h> 
 #include <stdio.h>
+#include "matrix.hh"
+#include <algorithm>
 
-typedef struct matrix
-{
-	int ** mat;
-	int rows; // number of rows
-	int cols; // number of columns
-} matrix;
+void conventional(matrix* a, matrix* b, matrix* output);
 
-// matrix::~matrix(){
-// 	printf("test ");
-// 	for (int i=0; i<this->rows; i++){
-// 		free (this->mat[i]);
-// 	}
-// 	free (this->mat);
-// }
+matrix* split(matrix* x, int row_start, int col_start, int row_break, int col_break);
 
-struct matrix;
+void strassen(matrix* output, matrix* a, matrix* b, int n);
 
-void free_matrix(matrix* m);
+int compute_pad(int dim, int cross_over);
 
-void conventional(matrix* a,
-                  matrix* b,
-                  matrix* output);
+matrix* strassen_pad(matrix* a, matrix* b, int cross_over);
 
 #endif

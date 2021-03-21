@@ -11,11 +11,11 @@ all: strassen
 # 				$(CC) explore_cutoff.o matrix_mul.o -o explore_cutoff
 
 
-tests: tests.o matrix_mul.o
-	  $(CC) tests.o matrix_mul.o -o tests	
+tests: tests.o matrix.o matrix_mul.o
+	  $(CC) tests.o matrix.o matrix_mul.o -o tests	
 
-matrix_mul: matrix_mul.o 
-			$(CC) matrix_mul.o -o matrix_mul
+# matrix_mul: matrix_mul.o matrix.o
+# 			$(CC) matrix_mul.o matrix.o -o matrix_mul
 
 tests.o: tests.cc
 		 $(CC) $(CFLAGS) tests.cc
@@ -23,8 +23,13 @@ tests.o: tests.cc
 matrix_mul.o: matrix_mul.cc
 			$(CC) $(CFLAGS) matrix_mul.cc
 
+matrix.o: matrix.cc
+		$(CC) $(CFLAGS) matrix.cc
+
 clean: 
 	rm *.o strassen tests
+
+
 
 
 

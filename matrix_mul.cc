@@ -1,43 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "matrix_mul.hh"
-
-
-matrix* malloc_matrix(int rows, int cols);
-
-void free_matrix(matrix* m);
-
-
-void conventional(matrix* a,
-                  matrix* b,
-                  matrix* output);
-
-
-matrix* malloc_matrix(int num_rows, int num_cols){
-  matrix* m = new matrix;
-  m->rows = num_rows;
-  m->cols = num_cols;
-  m->mat = (int**) malloc(num_rows*sizeof(uintptr_t));
-  for (int i =0; i<num_rows; i++){
-    m->mat[i] = (int*) malloc(num_cols*sizeof(int));
-    for(int j=0; j<num_cols; j++){
-      m->mat[i][j] = 0;
-    }
-  }
-  return m;
-}
-
-void free_matrix(matrix* m){
-  printf("test ");
-  for (int i=0; i<m->rows; i++){
-    printf("free %d %p\n", i, m->mat[i]);
-    free (m->mat[i]);
-  }
-  printf("free mat %p\n", m->mat);
-  free (m->mat);
-  delete m;
-}
-
+#include <algorithm>
 
 
 void conventional(matrix* a,
@@ -71,6 +35,7 @@ void conventional(matrix* a,
     }
 }
 
+
 matrix* split(matrix* x, 
               int row_start,
               int col_start,
@@ -81,27 +46,23 @@ matrix* split(matrix* x,
     int x_rows = x->rows;
     int x_cols = x->cols;
 
-    matrix* new_mat = malloc_matrix(x_rows/2, x_cols/2);
+    matrix* new_mat = malloc_matrix(x_rows/2, x_cols/2, x->pad/2);
     // New matrix index
     int row_pos = 0;
     int col_pos = 0;
 
     
     // Split matrices into quadrants
-    for (int i=row_start; i<row_break; i++){ 
-        for (int j=col_start; j<col_break; j++){ 
-            new_mat->mat[row_pos][col_pos] = x->mat[i][j]; 
-            row_pos++; 
-            col_pos++;
-        }
-    }
+
+    copy_matrix(new_mat, x, row_start, row_break, 
+                col_start, col_break, row_pos, col_pos);
+
     return new_mat;
 }
 
-matrix* strassen(matrix* a,
-               matrix* b,
-               matrix* output,
-               int n)
+void strassen(matrix* output,matrix* a,
+               matrix* b, 
+               int cross_over)
 {
     int a_rows = a->rows;
     int a_cols = a->cols;
@@ -109,37 +70,130 @@ matrix* strassen(matrix* a,
     int b_cols = b->cols;
     int output_rows = output->rows;
     int output_cols = output->cols;
+    int output_pad = output->pad;
     
-    if (a->rows == n) {
+    if (a->pad <=cross_over|| b->pad<=cross_over) {
         conventional(a, b, output);
-        return output;
+        return ;
     }
     // Strasse Magic
     matrix* a11 = split(a, 0, 0, a_rows/2, a_cols/2);
-    matrix* a12 = split(a, 0, a_cols/2/2, a_rows/2, a_cols);
+    matrix* a12 = split(a, 0, a_cols/2, a_rows/2, a_cols);
     matrix* a21 = split(a, a_rows/2, 0, a_rows, a_cols/2);
     matrix* a22 = split(a, a_rows/2, a_cols/2, a_rows, a_cols);
 
     matrix* b11 = split(b, 0, 0, b_rows/2, b_cols/2);
-    matrix* b12 = split(b, 0, b_cols/2/2, b_rows/2, b_cols);
+    matrix* b12 = split(b, 0, b_cols/2, b_rows/2, b_cols);
     matrix* b21 = split(b, b_rows/2, 0, b_rows, b_cols/2);
     matrix* b22 = split(b, b_rows/2, b_cols/2, b_rows, b_cols);
 
     // Make subtraction and and addition function
-    matrix* p1 = strassen(a11, b12 - b22);  //where did you define b12 and b22?
-    matrix* p2 = strassen(a11 + a12, b22);         
-    matrix* p3 = strassen(a21 + a22, b11);         
-    matrix* p4 = strassen(a22, b21 - b11);         
-    matrix* p5 = strassen(a11 + a22, b11 + b22);         
-    matrix* p6 = strassen(a12 - a22, b21 + b22);   
-    matrix* p7 = strassen(a11 - b21, b11 + b12);   
 
-    matrix c11 = p5 + p4 - p2 + p6;
-    matrix c12 = p1 + p2;
-    matrix c21 = p3 + p4;             
-    matrix c22 = p1 + p5 - p3 - p7;
+    matrix* p[8];
 
-    // Combine 4 quadrants
+    for(int i =1; i<8; i++){
+      p[i] = malloc_matrix(output_rows/2, output_cols/2, output_pad/2);
+    }
+
+    matrix* tmp1 = malloc_matrix(output_rows/2, output_cols/2, output_pad/2);
+    matrix* tmp2 = malloc_matrix(output_rows/2, output_cols/2, output_pad/2);
+    matrix* tmp3 = malloc_matrix(output_rows/2, output_cols/2, output_pad/2);
+
+    matrix_add(b12, b22, tmp1,-1);
+    strassen(p[1], a11, tmp1,cross_over);
+
+    matrix_add(a11, a12, tmp1, 1);
+    strassen(p[2], tmp1, b22,cross_over);
+
+    matrix_add(a21, a22, tmp1,1);
+    strassen(p[3], tmp1, b11, cross_over);
+
+    matrix_add(b21, b11, tmp1, -1);
+    strassen(p[4], a22, tmp1, cross_over);
+
+    matrix_add(a11, a22, tmp1, 1);
+    matrix_add(b11,b22, tmp2, 1);
+    strassen(p[5], tmp1, tmp2,cross_over);
+
+    matrix_add(a12, a22, tmp1, -1);
+    matrix_add(b21, b22, tmp2, 1);
+    strassen(p[6], tmp1, tmp2,cross_over);
+
+    matrix_add(a11, a21, tmp1, -1);
+    matrix_add(b11, b12, tmp2, 1);
+    strassen(p[7], tmp1, tmp2,cross_over);
+
+    // c11
+    matrix_add(p[5], p[4], tmp1, 1);
+    matrix_add(tmp1, p[2], tmp2, -1);
+    matrix_add(tmp2, p[6], tmp3, 1);
+    copy_matrix(output, tmp3, 0, output_pad/2, 0, output_pad/2, 0,0);
+
+    //c12
+    matrix_add(p[1], p[2], tmp1, 1);
+    copy_matrix(output, tmp1, 0, output_pad/2, 
+                0, output_pad/2, 0, output_pad/2);
+    //c21
+    matrix_add(p[3], p[4], tmp1, 1);
+    copy_matrix(output, tmp1, 0, output_pad/2, 
+                0, output_pad/2, output_pad/2,0);
+    //c22
+    matrix_add(p[1], p[5], tmp1, 1);
+    matrix_add(tmp1, p[3], tmp2, -1);
+    matrix_add(tmp2, p[7], tmp3, -1);
+    copy_matrix(output, tmp3, 0, output_pad/2, 
+                0, output_pad/2, output_pad/2, output_pad/2);
+
+    free_matrix(a11);
+    free_matrix(a12);
+    free_matrix(a21);
+    free_matrix(a22);
+
+    free_matrix(b11);
+    free_matrix(b12);
+    free_matrix(b21);
+    free_matrix(b22);
+
+    for (int i=1; i<8; i++){
+      free_matrix(p[1]);
+    }
+
+    free_matrix(tmp1);
+    free_matrix(tmp2);
+    free_matrix(tmp3);
+
+    // matrix c11 = p5 + p4 - p2 + p6;
+    // matrix c12 = p1 + p2;
+    // matrix c21 = p3 + p4;             
+    // matrix c22 = p1 + p5 - p3 - p7;
 
 }
 
+int compute_pad(int dim, int cross_over){
+  int pad = dim;
+  while(pad>cross_over){
+    pad = (pad+1)/2;
+  }
+  while(pad<dim){
+    pad = pad*2;
+  }
+  return pad;
+}
+
+matrix* strassen_pad(matrix* a, matrix* b, int cross_over){
+  int dim = std::max(std::max(a->rows, a->cols), std::max(b->rows, b->cols));
+  int pad = compute_pad(dim, cross_over);
+
+  matrix* new_a = malloc_matrix(a->rows, a->cols, pad);
+  copy_matrix(new_a, a, 0, a->rows, 0, a->cols, 0,0);
+
+  matrix* new_b = malloc_matrix(b->rows, b->cols, pad);
+  copy_matrix(new_b, b, 0, b->rows, 0, b->cols, 0,0);
+
+  matrix* output = malloc_matrix(a->rows, b->cols, pad);
+
+  strassen(output, new_a, new_b, cross_over);
+  free_matrix(new_a);
+  free_matrix(new_b);
+  return output;
+}
