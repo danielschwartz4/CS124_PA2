@@ -7,8 +7,8 @@
 
 void create_matrix(matrix* m, int start=1){
 	int x = start;
-	for (int i =0; i<m->pad; i++){
-		for(int j=0; j<m->pad; j++){
+	for (int i =0; i<m->rows; i++){
+		for(int j=0; j<m->cols; j++){
 			m->mat[i][j] = x;
 			x++;
 		}
@@ -103,7 +103,7 @@ int main(int argc, char const *argv[]){
 // Test Odd multiplication
 	matrix* x = malloc_matrix(5,5,5);
 	create_matrix(x, 1);
-	matrix* y = malloc_matrix(3,3,3);
+	matrix* y = malloc_matrix(5,5,5);
 	// make y an identity matrix
 	for (int i=0;i< y->rows; i++){
 		for(int j=0; j<y->cols; j++){
@@ -117,17 +117,16 @@ int main(int argc, char const *argv[]){
 	}
 
 
-	print_matrix(x);
-	print_matrix(y);
+	print_matrix((char*) "x",x);
+	print_matrix((char*) "y", y);
 	test_strassen_pad(x, y, 3, x);
-	printf("pass strassen xy\n");
+	printf("pass strassen pad odd\n");
 
 	free_matrix(a);
 	free_matrix(b);
 	free_matrix(c);
 	free_matrix(x);
 	free_matrix(y);
-	printf("finish test\n");
 	
 
 	// Test Odd and Even multiplication
@@ -137,8 +136,8 @@ int main(int argc, char const *argv[]){
 	create_matrix(y, 1);
 	matrix *z = malloc_matrix(3,3,5);
 
-	print_matrix(x);
-	print_matrix(y);
+	print_matrix((char*) "x",x);
+	print_matrix((char*) "y", y);
 	// conventional(x, y, z);
 
 	z->mat[0][0] = 135;
@@ -150,16 +149,14 @@ int main(int argc, char const *argv[]){
 	z->mat[2][0] = 485;
 	z->mat[2][1] = 550;
 	z->mat[2][2] = 615;
-	std::cout << z;
+	// std::cout << z;
 	test_strassen_pad(x, y, 3, z);
 
-	printf("pass strassen xy\n");
+	printf("pass strassen pad\n");
 
-	free_matrix(a);
-	free_matrix(b);
-	free_matrix(c);
 	free_matrix(x);
 	free_matrix(y);
+	free_matrix(z);
 	printf("finish test\n");
 	return 0;
 }

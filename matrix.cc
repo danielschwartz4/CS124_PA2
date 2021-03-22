@@ -52,10 +52,12 @@ void copy_matrix(matrix* dest, matrix* source,
 }
 
 void addition_assert(matrix* a, matrix* b, matrix* s){
-  assert(a->rows==b->rows);
-  assert(a->cols==b->cols);
-  assert(a->rows==s->rows);
-  assert(a->cols==s->cols);
+  // assert(a->rows==b->rows);
+  // assert(a->cols==b->cols);
+  // assert(a->rows==s->rows);
+  // assert(a->cols==s->cols);
+	assert(a->pad==b->pad);
+	assert(a->pad==s->pad);
 }
 
 //when ops is -1, it's matrix substraction. when opts is 1, it's matrix addition

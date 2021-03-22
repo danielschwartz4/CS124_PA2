@@ -15,9 +15,9 @@ void conventional(matrix* a,
     int output_rows = output->rows;
     int output_cols = output->cols;
 
-    assert(a_cols==b_rows);
-    assert(output_rows==a_rows);
-    assert(output_cols==b_cols);
+    // assert(a_cols==b_rows);
+    // assert(output_rows==a_rows);
+    // assert(output_cols==b_cols);
 
     for(int i = 0; i < a_rows; i++)
     {
@@ -70,25 +70,12 @@ void strassen(matrix* output,matrix* a,
     int output_cols = output->cols;
     int output_pad = output->pad;
     
-    // if (a->pad <=cross_over|| b->pad<=cross_over)
-    // if (a->row <=cross_over|| b->rows<=cross_over||
-    //   a->cols<=cross_over||b->cols<=cross_over)
     if (a->pad <=cross_over|| b->pad<=cross_over)
     {
         conventional(a, b, output);
         return ;
     }
     // Strasse Magic
-    // matrix* a11 = split(a, 0, 0, a_pad/2, a_pad/2);
-    // matrix* a12 = split(a, 0, a_pad/2, a_pad/2, a_pad);
-    // matrix* a21 = split(a, a_pad/2, 0, a_pad, a_pad/2);
-    // matrix* a22 = split(a, a_pad/2, a_pad/2, a_pad, a_pad);
-
-    // matrix* b11 = split(b, 0, 0, b_pad/2, b_pad/2);
-    // matrix* b12 = split(b, 0, b_pad/2, b_pad/2, b_pad);
-    // matrix* b21 = split(b, b_pad/2, 0, b_pad, b_pad/2);
-    // matrix* b22 = split(b, b_pad/2, b_pad/2, b_pad, b_pad);
-
     matrix* a11 = split(a, 0, 0, a_pad/2, a_pad/2);
     matrix* a12 = split(a, 0, a_pad/2, a_pad/2, a_pad);
     matrix* a21 = split(a, a_pad/2, 0, a_pad, a_pad/2);
