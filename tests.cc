@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "matrix.hh"
 #include "matrix_mul.hh"
+#include <iostream>
 
 void create_matrix(matrix* m, int start=1){
 	int x = start;
@@ -58,13 +59,14 @@ void test_strassen(matrix* a, matrix* b, matrix* expect){
 	free_matrix(tmp1);
 }
 
-void test_strassen_pad(matrix* a, matrix* b, int cross_over,matrix* expect){
+void test_strassen_pad(matrix* a, matrix* b, int cross_over, matrix* expect){
 	matrix* tmp1 = strassen_pad(a, b, cross_over);
 	compare_matrix(expect, tmp1);
 	free_matrix(tmp1);
 };
 
 int main(int argc, char const *argv[]){
+	// Test addition and simple multiplication
 	matrix* a = malloc_matrix(2,2,2);
 	create_matrix(a,1);
 
@@ -98,8 +100,8 @@ int main(int argc, char const *argv[]){
 	test_strassen(a,b,c);
 	printf("pass strassen\n");
 
-
-	matrix* x = malloc_matrix(3,3,3);
+// Test Odd multiplication
+	matrix* x = malloc_matrix(5,5,5);
 	create_matrix(x, 1);
 	matrix* y = malloc_matrix(3,3,3);
 	// make y an identity matrix
@@ -114,10 +116,44 @@ int main(int argc, char const *argv[]){
 		}
 	}
 
-	
-	test_strassen_pad(x, y, 1, x);
-	printf("pass strassen_pad\n");
 
+	print_matrix(x);
+	print_matrix(y);
+	test_strassen_pad(x, y, 3, x);
+	printf("pass strassen xy\n");
+
+	free_matrix(a);
+	free_matrix(b);
+	free_matrix(c);
+	free_matrix(x);
+	free_matrix(y);
+	printf("finish test\n");
+	
+
+	// Test Odd and Even multiplication
+	x = malloc_matrix(3,5,5);
+	create_matrix(x, 1);
+	y = malloc_matrix(5,3,5);
+	create_matrix(y, 1);
+	matrix *z = malloc_matrix(3,3,5);
+
+	print_matrix(x);
+	print_matrix(y);
+	// conventional(x, y, z);
+
+	z->mat[0][0] = 135;
+  	z->mat[0][1] = 150;
+	z->mat[0][2] = 165;
+  	z->mat[1][0] = 310;
+  	z->mat[1][1] = 350;
+	z->mat[1][2] = 390;
+	z->mat[2][0] = 485;
+	z->mat[2][1] = 550;
+	z->mat[2][2] = 615;
+	std::cout << z;
+	test_strassen_pad(x, y, 3, z);
+
+	printf("pass strassen xy\n");
 
 	free_matrix(a);
 	free_matrix(b);
