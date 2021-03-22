@@ -12,7 +12,7 @@ all: strassen
 
 
 tests: tests.o matrix.o matrix_mul.o
-	  $(CC) tests.o matrix.o matrix_mul.o -o tests	
+	  $(CC) tests.o matrix.o matrix_mul.o -o tests
 
 explore_crossover: explore_crossover.o matrix_mul.o matrix.o
 			$(CC) explore_crossover.o matrix_mul.o matrix.o -o explore_crossover
@@ -28,6 +28,9 @@ matrix_mul.o: matrix_mul.cc
 
 matrix.o: matrix.cc
 		$(CC) $(CFLAGS) matrix.cc
+
+# triangle: triangle.cc
+# 		$(CC) $(CFLAGS) triangle.cc
 
 clean: 
 	rm *.o strassen tests
