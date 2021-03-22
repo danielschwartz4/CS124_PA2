@@ -20,7 +20,7 @@ matrix* generate_rand_matrix(int dim){
 
 int main(int argc, char const *argv[])
 {
-	int n=150;
+	int n=200;
 	matrix* a = generate_rand_matrix(n);
 	matrix* b = generate_rand_matrix(n);
 	matrix* c = malloc_matrix(n,n,n);
