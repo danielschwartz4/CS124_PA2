@@ -47,6 +47,7 @@ void copy_matrix(matrix* dest, matrix* source,
         dest_j++;
       }
       dest_i++;
+      dest_j=dest_col_start;
     }
 
 }
@@ -61,9 +62,19 @@ void addition_assert(matrix* a, matrix* b, matrix* s){
 //when ops is -1, it's matrix substraction. when opts is 1, it's matrix addition
 void matrix_add(matrix* a, matrix* b, matrix* s, int ops){
   addition_assert(a, b, s);
-  for (int i=0; i<a->rows; i++){
-    for (int j=0; j<a->cols; j++){
+  for (int i=0; i<a->pad; i++){
+    for (int j=0; j<a->pad; j++){
       s->mat[i][j] = a->mat[i][j] + ops*b->mat[i][j];
     }
   }
+}
+
+void print_matrix(matrix* m){
+	for(int i=0; i<m->pad; i++){
+		for(int j=0; j<m->pad; j++){
+			printf("%d\t", m->mat[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
 }

@@ -27,9 +27,9 @@ void conventional(matrix* a,
         }
     }
 
-    for (int i = 0; i < a_rows; i++) {
-        for (int j = 0; j < b_cols; j++) {
-            for (int k = 0; k < a_cols; k++)
+    for (int i = 0; i < a->pad; i++) {
+        for (int j = 0; j < b->pad; j++) {
+            for (int k = 0; k < a->pad; k++)
                 output->mat[i][j] += a->mat[i][k] * b->mat[k][j];
         }
     }
@@ -47,6 +47,7 @@ matrix* split(matrix* x,
     int x_cols = x->cols;
 
     matrix* new_mat = malloc_matrix(x_rows/2, x_cols/2, x->pad/2);
+
     // New matrix index
     int row_pos = 0;
     int col_pos = 0;
@@ -56,7 +57,6 @@ matrix* split(matrix* x,
 
     copy_matrix(new_mat, x, row_start, row_break, 
                 col_start, col_break, row_pos, col_pos);
-
     return new_mat;
 }
 
@@ -64,10 +64,8 @@ void strassen(matrix* output,matrix* a,
                matrix* b, 
                int cross_over)
 {
-    int a_rows = a->rows;
-    int a_cols = a->cols;
-    int b_rows = b->rows;
-    int b_cols = b->cols;
+    int a_pad = a->pad;
+    int b_pad = b->pad;
     int output_rows = output->rows;
     int output_cols = output->cols;
     int output_pad = output->pad;
@@ -77,15 +75,16 @@ void strassen(matrix* output,matrix* a,
         return ;
     }
     // Strasse Magic
-    matrix* a11 = split(a, 0, 0, a_rows/2, a_cols/2);
-    matrix* a12 = split(a, 0, a_cols/2, a_rows/2, a_cols);
-    matrix* a21 = split(a, a_rows/2, 0, a_rows, a_cols/2);
-    matrix* a22 = split(a, a_rows/2, a_cols/2, a_rows, a_cols);
+    matrix* a11 = split(a, 0, 0, a_pad/2, a_pad/2);
+    matrix* a12 = split(a, 0, a_pad/2, a_pad/2, a_pad);
+    matrix* a21 = split(a, a_pad/2, 0, a_pad, a_pad/2);
+    matrix* a22 = split(a, a_pad/2, a_pad/2, a_pad, a_pad);
+    print_matrix(a22);
 
-    matrix* b11 = split(b, 0, 0, b_rows/2, b_cols/2);
-    matrix* b12 = split(b, 0, b_cols/2, b_rows/2, b_cols);
-    matrix* b21 = split(b, b_rows/2, 0, b_rows, b_cols/2);
-    matrix* b22 = split(b, b_rows/2, b_cols/2, b_rows, b_cols);
+    matrix* b11 = split(b, 0, 0, b_pad/2, b_pad/2);
+    matrix* b12 = split(b, 0, b_pad/2, b_pad/2, b_pad);
+    matrix* b21 = split(b, b_pad/2, 0, b_pad, b_pad/2);
+    matrix* b22 = split(b, b_pad/2, b_pad/2, b_pad, b_pad);
 
     // Make subtraction and and addition function
 
@@ -183,16 +182,26 @@ int compute_pad(int dim, int cross_over){
 matrix* strassen_pad(matrix* a, matrix* b, int cross_over){
   int dim = std::max(std::max(a->rows, a->cols), std::max(b->rows, b->cols));
   int pad = compute_pad(dim, cross_over);
+  printf("pad: %d\n", pad);
 
   matrix* new_a = malloc_matrix(a->rows, a->cols, pad);
   copy_matrix(new_a, a, 0, a->rows, 0, a->cols, 0,0);
+  printf("new_a\n");
+  print_matrix(new_a);
 
   matrix* new_b = malloc_matrix(b->rows, b->cols, pad);
   copy_matrix(new_b, b, 0, b->rows, 0, b->cols, 0,0);
+  printf("new_b\n");
+  print_matrix(new_b);
 
+  printf("malloc output\n");
   matrix* output = malloc_matrix(a->rows, b->cols, pad);
+  printf("output shape: %d %d %d\n", output->rows, output->cols, output->pad);
 
   strassen(output, new_a, new_b, cross_over);
+  printf("output\n");
+  print_matrix(output);
+
   free_matrix(new_a);
   free_matrix(new_b);
   return output;
