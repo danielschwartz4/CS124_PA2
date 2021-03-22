@@ -1,6 +1,7 @@
 #include <cstdint>
 #include <stdlib.h> 
 #include <stdio.h>
+#include <assert.h> 
 #include "matrix.hh"
 #include "matrix_mul.hh"
 #include <iostream>
@@ -152,11 +153,18 @@ int main(int argc, char const *argv[]){
 	// std::cout << z;
 	test_strassen_pad(x, y, 3, z);
 
+	matrix* z1 = strassen_pad(x, y, 3);
+	matrix* z2 = strassen_pad(x,y, 2);
+	compare_matrix(z1, z2);
+
+
 	printf("pass strassen pad\n");
 
 	free_matrix(x);
 	free_matrix(y);
 	free_matrix(z);
+	free_matrix(z1);
+	free_matrix(z2);
 	printf("finish test\n");
 	return 0;
 }

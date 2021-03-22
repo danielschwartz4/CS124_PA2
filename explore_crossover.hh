@@ -1,4 +1,6 @@
-#include <iostream>
+
+#include <stdio.h>
+#include <cstdio>
 #include <vector>
 #include "matrix.hh"
 #include "matrix_mul.hh"
