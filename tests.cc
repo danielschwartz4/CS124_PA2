@@ -53,7 +53,6 @@ void test_conventional(matrix* a, matrix* b, matrix* expect){
 
 void test_strassen(matrix* a, matrix* b, matrix* expect){
 	matrix* tmp1 = malloc_matrix(a->rows, b->cols, a->pad);
-	print_matrix(tmp1);
 	strassen(tmp1, a, b,1);
 	compare_matrix(tmp1, expect);
 	free_matrix(tmp1);
@@ -100,9 +99,9 @@ int main(int argc, char const *argv[]){
 	printf("pass strassen\n");
 
 
-	matrix* x = malloc_matrix(5,5,5);
+	matrix* x = malloc_matrix(3,3,3);
 	create_matrix(x, 1);
-	matrix* y = malloc_matrix(5,5,5);
+	matrix* y = malloc_matrix(3,3,3);
 	// make y an identity matrix
 	for (int i=0;i< y->rows; i++){
 		for(int j=0; j<y->cols; j++){
@@ -115,11 +114,9 @@ int main(int argc, char const *argv[]){
 		}
 	}
 
-	print_matrix(x);
-	print_matrix(y);
-	test_strassen_pad(x, y, 3, x);
-	printf("pass strassen xy\n");
-
+	
+	test_strassen_pad(x, y, 1, x);
+	printf("pass strassen_pad\n");
 
 
 	free_matrix(a);

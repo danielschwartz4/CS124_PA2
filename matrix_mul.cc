@@ -70,21 +70,35 @@ void strassen(matrix* output,matrix* a,
     int output_cols = output->cols;
     int output_pad = output->pad;
     
-    if (a->pad <=cross_over|| b->pad<=cross_over) {
+    // if (a->pad <=cross_over|| b->pad<=cross_over)
+    // if (a->row <=cross_over|| b->rows<=cross_over||
+    //   a->cols<=cross_over||b->cols<=cross_over)
+    if (a->pad <=cross_over|| b->pad<=cross_over)
+    {
         conventional(a, b, output);
         return ;
     }
     // Strasse Magic
+    // matrix* a11 = split(a, 0, 0, a_pad/2, a_pad/2);
+    // matrix* a12 = split(a, 0, a_pad/2, a_pad/2, a_pad);
+    // matrix* a21 = split(a, a_pad/2, 0, a_pad, a_pad/2);
+    // matrix* a22 = split(a, a_pad/2, a_pad/2, a_pad, a_pad);
+
+    // matrix* b11 = split(b, 0, 0, b_pad/2, b_pad/2);
+    // matrix* b12 = split(b, 0, b_pad/2, b_pad/2, b_pad);
+    // matrix* b21 = split(b, b_pad/2, 0, b_pad, b_pad/2);
+    // matrix* b22 = split(b, b_pad/2, b_pad/2, b_pad, b_pad);
+
     matrix* a11 = split(a, 0, 0, a_pad/2, a_pad/2);
     matrix* a12 = split(a, 0, a_pad/2, a_pad/2, a_pad);
     matrix* a21 = split(a, a_pad/2, 0, a_pad, a_pad/2);
     matrix* a22 = split(a, a_pad/2, a_pad/2, a_pad, a_pad);
-    print_matrix(a22);
 
     matrix* b11 = split(b, 0, 0, b_pad/2, b_pad/2);
     matrix* b12 = split(b, 0, b_pad/2, b_pad/2, b_pad);
     matrix* b21 = split(b, b_pad/2, 0, b_pad, b_pad/2);
     matrix* b22 = split(b, b_pad/2, b_pad/2, b_pad, b_pad);
+
 
     // Make subtraction and and addition function
 
@@ -182,25 +196,16 @@ int compute_pad(int dim, int cross_over){
 matrix* strassen_pad(matrix* a, matrix* b, int cross_over){
   int dim = std::max(std::max(a->rows, a->cols), std::max(b->rows, b->cols));
   int pad = compute_pad(dim, cross_over);
-  printf("pad: %d\n", pad);
-
+  // printf("pad: %d\n", pad);
   matrix* new_a = malloc_matrix(a->rows, a->cols, pad);
   copy_matrix(new_a, a, 0, a->rows, 0, a->cols, 0,0);
-  printf("new_a\n");
-  print_matrix(new_a);
 
   matrix* new_b = malloc_matrix(b->rows, b->cols, pad);
   copy_matrix(new_b, b, 0, b->rows, 0, b->cols, 0,0);
-  printf("new_b\n");
-  print_matrix(new_b);
 
-  printf("malloc output\n");
   matrix* output = malloc_matrix(a->rows, b->cols, pad);
-  printf("output shape: %d %d %d\n", output->rows, output->cols, output->pad);
 
   strassen(output, new_a, new_b, cross_over);
-  printf("output\n");
-  print_matrix(output);
 
   free_matrix(new_a);
   free_matrix(new_b);

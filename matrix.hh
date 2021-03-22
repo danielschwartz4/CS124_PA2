@@ -25,6 +25,6 @@ void addition_assert(matrix* a, matrix* b, matrix* s);
 
 void matrix_add(matrix* a, matrix* b, matrix* s, int ops);
 
-void print_matrix(matrix* m);
+void print_matrix(char* matrix_name, matrix* m);
 
 #endif

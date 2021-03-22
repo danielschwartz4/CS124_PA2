@@ -14,8 +14,11 @@ all: strassen
 tests: tests.o matrix.o matrix_mul.o
 	  $(CC) tests.o matrix.o matrix_mul.o -o tests	
 
-# matrix_mul: matrix_mul.o matrix.o
-# 			$(CC) matrix_mul.o matrix.o -o matrix_mul
+explore_crossover: explore_crossover.o matrix_mul.o matrix.o
+			$(CC) explore_crossover.o matrix_mul.o matrix.o -o explore_crossover
+
+explore_crossover.o: explore_crossover.cc
+					$(CC) $(CFLAGS) explore_crossover.cc
 
 tests.o: tests.cc
 		 $(CC) $(CFLAGS) tests.cc

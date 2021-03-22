@@ -21,7 +21,6 @@ matrix* malloc_matrix(int num_rows, int num_cols, int pad){
   return m;
 }
 
-
 void free_matrix(matrix* m){
   // printf("test ");
   for (int i=0; i<m->pad; i++){
@@ -69,7 +68,8 @@ void matrix_add(matrix* a, matrix* b, matrix* s, int ops){
   }
 }
 
-void print_matrix(matrix* m){
+void print_matrix(char* matrix_name, matrix* m){
+	printf("%s\n", matrix_name);
 	for(int i=0; i<m->pad; i++){
 		for(int j=0; j<m->pad; j++){
 			printf("%d\t", m->mat[i][j]);
