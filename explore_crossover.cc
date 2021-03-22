@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <cstdio>
 #include <vector>
@@ -24,7 +23,6 @@ matrix* generate_rand_matrix(int dim){
 
 int main(int argc, char const *argv[])
 {	
-
 	// FILE * pFile;
 	// pFile = fopen("crossover.csv","w");
 	int start_dim =  atoi(argv[1]);

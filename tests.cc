@@ -142,10 +142,10 @@ int main(int argc, char const *argv[]){
 	// conventional(x, y, z);
 
 	z->mat[0][0] = 135;
-  	z->mat[0][1] = 150;
+  z->mat[0][1] = 150;
 	z->mat[0][2] = 165;
-  	z->mat[1][0] = 310;
-  	z->mat[1][1] = 350;
+  z->mat[1][0] = 310;
+  z->mat[1][1] = 350;
 	z->mat[1][2] = 390;
 	z->mat[2][0] = 485;
 	z->mat[2][1] = 550;

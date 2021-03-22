@@ -1,5 +1,7 @@
 matrix_mul
+matrix
 strassen
+explore_crossover
 a.out
 tests
 *.o
