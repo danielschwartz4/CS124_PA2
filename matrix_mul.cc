@@ -10,11 +10,11 @@ void conventional(matrix* a,
                   matrix* output)
 {
     int a_rows = a->rows;
-    int a_cols = a->cols;
-    int b_rows = b->rows;
+    // int a_cols = a->cols;
+    // int b_rows = b->rows;
     int b_cols = b->cols;
-    int output_rows = output->rows;
-    int output_cols = output->cols;
+    // int output_rows = output->rows;
+    // int output_cols = output->cols;
 
     // assert(a_cols==b_rows);
     // assert(output_rows==a_rows);

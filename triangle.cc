@@ -1,31 +1,28 @@
 #include <iostream>
 #include <vector>
 #include "matrix.hh"
-#include "matrix.cc"
 #include "matrix_mul.hh"
-#include "matrix_mul.cc"
 #include <algorithm>
+#include <ctime>
 
 
 int calc_diagonal(matrix *m){
-	int col_idx = 0;
   int rows = m->rows;
   int cols = m->cols;
   assert(rows == cols);
   int sum = 0;
   for(int i = 0; i < rows; i++)
     {
-        for(int j = 0; j < cols; j++)
-        {
-            if (j == col_idx)
-            {
-                sum = m->mat[i][j] + sum;
-            }
-        }
+      sum+=m->mat[i][i];
     }
   int num_triangles = sum / 6;
-  std::cout << num_triangles;
+  printf("num_triangles: %d\n", num_triangles);
+  // std::cout << num_triangles;
   return num_triangles;
+}
+
+float expected_num_triangles(int n, float p){
+  return n*(n-1)*(n-2)/6*pow(p, 3);
 }
 
 matrix* create_graph(float p, int v){
@@ -37,9 +34,7 @@ matrix* create_graph(float p, int v){
             m->mat[i][j] = 2;
         }
     }
-  int rand_seed = (unsigned) time(0);
-  srand(rand_seed);
-  float r = rand() % 100 + 1;
+
   for(int i = 0; i < v; i++)
     {
         for(int j = 0; j < v; j++)
@@ -51,7 +46,8 @@ matrix* create_graph(float p, int v){
             else if (m->mat[i][j] == 2)
             {
                 float r = rand() % 100 + 1;
-                if (r / 100 < p)
+                // printf("r: %f", r/100);
+                if (r/100 <= p)
                 {
                     m->mat[i][j] = 1;
                     m->mat[j][i] = 1;
@@ -69,27 +65,33 @@ matrix* create_graph(float p, int v){
             
         }
     }
-  print_matrix((char*) "m", m);
+  // print_matrix((char*) "m", m);
   
   return m;
 }
 
-int main(){
-  matrix* c = malloc_matrix(1024,1024,1024);
-  matrix* a_cubed = malloc_matrix(1024,1024,1024);
-  matrix* m = create_graph(.05, 1024);
+int main(int argc, char const *argv[]){
+  
+  int n = atoi(argv[1]);
+  float p = atof(argv[2]);
+  int cross_over = 64;
 
-  conventional(m, m, c);
-  conventional(c, m, a_cubed);
+  int num_triangles = 0;
 
-  // matrix* a_squared = strassen_pad(m, m, 1024);
-  // matrix* a_cubed = strassen_pad(m, a_squared, 1024);
+  for (int i =0; i<5; i++){
+    matrix* m = create_graph(p, n);
 
-  int num_triangles = calc_diagonal(a_cubed);
-  std::cout << num_triangles << "\n";
+    matrix* a_squared = strassen_pad(m, m, cross_over);
+    // print_matrix((char*) "s", a_squared);
+    matrix* a_cubed = strassen_pad(a_squared,m, cross_over);
+    // print_matrix((char*) "c", a_cubed);
 
-  free_matrix(c);
-  // free_matrix(a_squared);
-  free_matrix(a_cubed);
-  free_matrix(m);
+    num_triangles +=calc_diagonal(a_cubed);
+    free_matrix(a_squared);
+    free_matrix(a_cubed);
+    free_matrix(m);
+  }
+ 
+  printf("%f\t%d\t%f\n", p, (num_triangles)/5, expected_num_triangles(n,p));
+
 }
