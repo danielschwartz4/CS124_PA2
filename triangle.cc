@@ -75,24 +75,21 @@ matrix* create_graph(float p, int v){
 }
 
 int main(){
-  // matrix* c = malloc_matrix(4,4,4);
-  // matrix* a_cubed = malloc_matrix(4,4,4);
+  matrix* c = malloc_matrix(1024,1024,1024);
+  matrix* a_cubed = malloc_matrix(1024,1024,1024);
   matrix* m = create_graph(.05, 1024);
 
-  // conventional(m, m, c);
-  // print_matrix((char*) "s", c);
-  // conventional(c, m, a_cubed);
-  // print_matrix((char*) "c", a_cubed);
+  conventional(m, m, c);
+  conventional(c, m, a_cubed);
 
-  matrix* a_squared = strassen_pad(m, m, 1024);
-  print_matrix((char*) "s", a_squared);
-  matrix* a_cubed = strassen_pad(m, a_squared, 1024);
-  print_matrix((char*) "c", a_cubed);
+  // matrix* a_squared = strassen_pad(m, m, 1024);
+  // matrix* a_cubed = strassen_pad(m, a_squared, 1024);
 
   int num_triangles = calc_diagonal(a_cubed);
   std::cout << num_triangles << "\n";
 
-  free_matrix(a_squared);
+  free_matrix(c);
+  // free_matrix(a_squared);
   free_matrix(a_cubed);
   free_matrix(m);
 }

@@ -15,6 +15,30 @@ void create_matrix(matrix* m, int start=1){
 		}
 	}
 }
+matrix* create_random_matrix(int rows, int cols, float p){
+	matrix* m = malloc_matrix(rows, cols, std::max(rows, cols));
+	int rand_seed = (unsigned) time(0);
+  srand(rand_seed);
+
+	for(int i = 0; i < rows; i++)
+			{
+					for(int j = 0; j < cols; j++)
+					{
+							
+							float r = rand() % 100 + 1;
+							if (r / 100 < p)
+							{
+									m->mat[i][j] = 1;
+							}
+							else
+							{
+									m->mat[i][j] = 0;
+							}
+					}
+			}
+		return m;
+}
+
 
 void compare_matrix(matrix* a, matrix* b){
 	assert(a->rows==b->rows);
@@ -166,5 +190,20 @@ int main(int argc, char const *argv[]){
 	free_matrix(z1);
 	free_matrix(z2);
 	printf("finish test\n");
+
+// Random matrix
+	matrix* m1 = create_random_matrix(5,13,0.5);
+	print_matrix((char*) "m1", m1);
+	matrix* m2 = create_random_matrix(101,5,0.8);
+	print_matrix((char*) "m2", m2);
+	matrix* c1 = malloc_matrix(5,5,101);
+	print_matrix((char*) "c1", c1);
+	conventional(m1,m2,c1);
+	test_strassen_pad(m1, m2, 1, c1);
+	printf("pass compare_matrix\n");
+
+	free_matrix(m1);
+	free_matrix(m2);
+	free_matrix(c1);
 	return 0;
 }
