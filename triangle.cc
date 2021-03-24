@@ -17,7 +17,6 @@ int calc_diagonal(matrix *m){
     }
   int num_triangles = sum / 6;
   printf("num_triangles: %d\n", num_triangles);
-  // std::cout << num_triangles;
   return num_triangles;
 }
 
