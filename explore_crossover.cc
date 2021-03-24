@@ -19,8 +19,6 @@ void generate_rand_matrix(matrix* m, int dim){
 
 int main(int argc, char const *argv[])
 {	
-	// FILE * pFile;
-	// pFile = fopen("crossover.csv","w");
 	int start_dim =  atoi(argv[1]);
 	int end_dim = atoi(argv[2]);
 
@@ -52,9 +50,10 @@ int main(int argc, char const *argv[])
 				generate_rand_matrix(b, i);
 
 				str_start = clock();
-				strassen_pad(a, b, cross_over);
+				matrix* m = strassen_pad(a, b, cross_over);
 				str_end = clock();
 				strs_spend += str_end-str_start;
+				free_matrix(m);
 			}
 			
 
@@ -74,7 +73,6 @@ int main(int argc, char const *argv[])
 		free_matrix(b);
 		free_matrix(c);
 	}
-	// fclose (pFile);
 
 	return 0;
 }

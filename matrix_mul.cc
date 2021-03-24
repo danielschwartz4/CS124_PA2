@@ -10,15 +10,7 @@ void conventional(matrix* a,
                   matrix* output)
 {
     int a_rows = a->rows;
-    // int a_cols = a->cols;
-    // int b_rows = b->rows;
     int b_cols = b->cols;
-    // int output_rows = output->rows;
-    // int output_cols = output->cols;
-
-    // assert(a_cols==b_rows);
-    // assert(output_rows==a_rows);
-    // assert(output_cols==b_cols);
 
     for(int i = 0; i < a_rows; i++)
     {
@@ -163,11 +155,6 @@ void strassen(matrix* output,matrix* a,
     free_matrix(tmp2);
     free_matrix(tmp3);
 
-    // matrix c11 = p5 + p4 - p2 + p6;
-    // matrix c12 = p1 + p2;
-    // matrix c21 = p3 + p4;             
-    // matrix c22 = p1 + p5 - p3 - p7;
-
 }
 
 int compute_pad(int dim, int cross_over){
@@ -184,7 +171,6 @@ int compute_pad(int dim, int cross_over){
 matrix* strassen_pad(matrix* a, matrix* b, int cross_over){
   int dim = std::max(std::max(a->rows, a->cols), std::max(b->rows, b->cols));
   int pad = compute_pad(dim, cross_over);
-  // printf("pad: %d\n", pad);
   matrix* new_a = malloc_matrix(a->rows, a->cols, pad);
   copy_matrix(new_a, a, 0, a->rows, 0, a->cols, 0,0);
 

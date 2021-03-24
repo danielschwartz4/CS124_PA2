@@ -2,6 +2,8 @@ matrix_mul
 matrix
 strassen
 explore_crossover
+explore_corssover2
+triangle
 a.out
 tests
 *.o
