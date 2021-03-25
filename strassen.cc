@@ -24,7 +24,7 @@ int main(int argc, char const *argv[])
     fill_matrix_from_file(infile, a, n);
     matrix* b = malloc_matrix(n, n, n);
     fill_matrix_from_file(infile, b, n);
-    int cross_over = 40;
+    int cross_over =40;
     matrix* c = strassen_pad(a, b, cross_over);
     for(int i=0; i<n; i++){
     	for(int j=0; j<n; j++){
