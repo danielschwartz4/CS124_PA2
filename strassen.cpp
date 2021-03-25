@@ -27,9 +27,8 @@ int main(int argc, char const *argv[])
     int cross_over =40;
     matrix* c = strassen_pad(a, b, cross_over);
     for(int i=0; i<n; i++){
-    	for(int j=0; j<n; j++){
-    		printf("%d\n", c->mat[i][j]);
-    	}
+    	printf("%d\n", c->mat[i][i]);
+    	
     }
 
     free_matrix(a);
