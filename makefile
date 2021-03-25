@@ -18,8 +18,8 @@ explore_crossover2: explore_crossover2.o matrix_mul.o matrix.o
 explore_crossover: explore_crossover.o matrix_mul.o matrix.o
 			$(CC) explore_crossover.o matrix_mul.o matrix.o -o explore_crossover
 
-strassen.o: strassen.cc
-		$(CC) $(CFLAGS) strassen.cc
+strassen.o: strassen.cpp
+		$(CC) $(CFLAGS) strassen.cpp
 
 explore_crossover2.o: explore_crossover2.cc
 					$(CC) $(CFLAGS) -std=c++17 explore_crossover2.cc
