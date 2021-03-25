@@ -23,7 +23,7 @@ int main(int argc, char const *argv[])
 {	
 	int dim =  atoi(argv[1]);
 	int crossover_start = atoi(argv[2]);
-	int increment = 50;
+	int increment = 1;
 	assert(dim>=100);
 
 	

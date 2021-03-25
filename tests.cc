@@ -191,9 +191,9 @@ int main(int argc, char const *argv[]){
 	printf("finish test\n");
 
 // Random matrix
-	matrix* m1 = create_random_matrix(5,13,0.5);
+	matrix* m1 = create_random_matrix(9,9,0.5);
 	print_matrix((char*) "m1", m1);
-	matrix* m2 = create_random_matrix(101,5,0.8);
+	matrix* m2 = create_random_matrix(9,9,0.8);
 	print_matrix((char*) "m2", m2);
 	matrix* c1 = malloc_matrix(5,5,101);
 	print_matrix((char*) "c1", c1);
